@@ -1,0 +1,8 @@
+ffsim>=0.0.45
+pyscf>=2.5
+numpy>=1.26
+scipy>=1.12
+matplotlib>=3.8
+
+# Versions this code was actually tested with:
+# ffsim==0.0.59, pyscf==2.10.0, numpy==2.3.2, scipy==1.16.1, matplotlib==3.10.5
