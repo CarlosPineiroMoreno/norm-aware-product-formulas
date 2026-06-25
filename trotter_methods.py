@@ -10,11 +10,15 @@ Methods (matching the paper's notation):
     U_lambda   optimized-lambda decomposition, U_{lambda~}
     OG         Omelyan-General (Theorem 1 in the paper)
 
-All of LTS/PS/PS_RANDOM/U_lambda accept an `order` parameter (0/1 = first
-order, 2 = second-order/Strang-symmetrized, 4 = fourth-order, ...) via
-ffsim's own `simulate_trotter_step_iterator`. OG is inherently a fixed
-second-order (4-group forward/backward) construction, so it has no `order`
-parameter.
+All of LTS/PS/PS_RANDOM/U_lambda accept an `order` parameter via ffsim's own
+`simulate_trotter_step_iterator`:
+    order=0  ->  1st order (LTS^[1], PS^[1], U_lambda^[1], ...)
+    order=1  ->  2nd order (LTS^[2], PS^[2], U_lambda^[2], ...) -- a single
+                 Strang/forward-backward symmetrization of the order=0 seed
+    order=2, 4, ...  ->  4th, 8th, ... order (recursive Suzuki composition;
+                 each increment beyond 1 doubles the order)
+OG is inherently a fixed second-order (4-group forward/backward)
+construction, so it has no `order` parameter.
 
 Usage:
     import ffsim
@@ -25,7 +29,7 @@ Usage:
     )
     ham = TrotterHamiltonian.from_ffsim(df_ham)
     vec = simulate_trotter_double_factorized_PS(
-        initial_state, ham, time=1.0, norb=norb, nelec=nelec, n_steps=100, order=2
+        initial_state, ham, time=1.0, norb=norb, nelec=nelec, n_steps=100, order=1
     )
 """
 
