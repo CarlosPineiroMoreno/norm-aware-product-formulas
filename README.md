@@ -79,4 +79,4 @@ If you use this code, please cite the paper:
 
 ## License
 
-MIT -- see `LICENSE`.
+-- see `LICENSE`.
