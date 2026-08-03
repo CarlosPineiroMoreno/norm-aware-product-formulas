@@ -11,7 +11,7 @@ second-order ratio would not be actionable.
     python3 paper_figures/figure2b_ratios.py            # replot from results/
     python3 paper_figures/figure2b_ratios.py --compute  # rerun the sweep first
 
-Outputs figures/Ratios_PRL_1col_L3_t1.0.pdf.
+Outputs figures/Ratios_PRL_1col_L3_t1.pdf.
 """
 from __future__ import annotations
 
@@ -84,7 +84,7 @@ def plot(data, width=7, height=5, two_column=False, out_dir=OUT, save=True):
     if save:
         os.makedirs(out_dir, exist_ok=True)
         tag = '2col' if two_column else '1col'
-        path = os.path.join(out_dir, f'Ratios_PRL_{tag}_L{L}_t{t}.pdf')
+        path = os.path.join(out_dir, f'Ratios_PRL_{tag}_L{L}_t{t:g}.pdf')
         fig.savefig(path, bbox_inches='tight', dpi=300)
         print("[saved]", os.path.normpath(path))
     return fig

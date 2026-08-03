@@ -8,7 +8,7 @@ err = a alpha^n whose exponent is quoted in the legend.
     python3 paper_figures/figure2a_errors.py            # replot from results/
     python3 paper_figures/figure2a_errors.py --compute  # rerun the sweep first
 
-Outputs figures/Errors_screen_L3_t1.0.pdf.
+Outputs figures/Errors_screen_L3_t1.pdf.
 """
 from __future__ import annotations
 
@@ -77,7 +77,7 @@ def plot(data, out_dir=OUT, save=True):
 
     if save:
         os.makedirs(out_dir, exist_ok=True)
-        path = os.path.join(out_dir, f'Errors_screen_L{L}_t{t}.pdf')
+        path = os.path.join(out_dir, f'Errors_screen_L{L}_t{t:g}.pdf')
         fig.savefig(path, bbox_inches='tight', dpi=150)
         print("[saved]", os.path.normpath(path))
     return fig

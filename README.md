@@ -36,9 +36,6 @@ paper_figures/       one script per figure, named after the paper's numbering
   data/                    precomputed results for Figs. 6 and 7
 ```
 
-Figures 1 and 5 are TikZ circuit drawings in the manuscript itself, so they
-have no script here.
-
 The formulas are implemented **twice**, against two different
 representations: `evolver` builds full propagators for the spin lattice, and
 `pauli` works from Pauli strings for the benchmark models of Fig. 6. The
