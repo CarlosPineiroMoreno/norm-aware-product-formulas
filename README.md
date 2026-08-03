@@ -90,7 +90,3 @@ If you use this code, please cite the paper:
   year    = {2025}
 }
 ```
-
-## License
-
--- see `LICENSE`.
