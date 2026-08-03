@@ -138,6 +138,6 @@ slightly differently.
   title   = {Norm-Aware Product Formulas for Hamiltonian Simulations},
   author  = {Pi{\~n}eiro Moreno, Carlos A. and Krause, Pascal and Bande, Annika},
   journal = {in preparation},
-  year    = {2025}
+  year    = {2026}
 }
 ```
