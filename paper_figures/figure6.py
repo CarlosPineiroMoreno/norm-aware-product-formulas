@@ -25,9 +25,13 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-from common import (LAMBDA_TILDE, Stepper, all_to_all, chain, hubbard_model,
-                    random_klocal_model, spin_model, square, use_pra_style,
-                    FIG_W_2COL)
+import sys
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), os.pardir))
+
+from norm_aware.constants import LAMBDA_TILDE
+from norm_aware.pauli import (Stepper, all_to_all, chain, hubbard_model,
+                              random_klocal_model, spin_model, square)
+from norm_aware.style import FIG_W_2COL, use_pra_style
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(HERE, "data", "figure6_lambda_N100.npz")

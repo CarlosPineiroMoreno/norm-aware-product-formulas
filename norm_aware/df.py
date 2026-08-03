@@ -6,11 +6,10 @@ standard library -- no private/internal packages.
 Methods (matching the paper's notation):
     LTS        Lie-Trotter-Suzuki (the textbook product formula)
     PS         Partial-Strang
-    PS_RANDOM  Partial-Strang Random (PS with the sandwiching term chosen at random)
     U_lambda   optimized-lambda decomposition, U_{lambda~}
     OG         Omelyan-General (Theorem 1 in the paper)
 
-All of LTS/PS/PS_RANDOM/U_lambda accept an `order` parameter via ffsim's own
+All of LTS/PS/U_lambda accept an `order` parameter via ffsim's own
 `simulate_trotter_step_iterator`:
     order=0  ->  1st order (LTS^[1], PS^[1], U_lambda^[1], ...)
     order=1  ->  2nd order (LTS^[2], PS^[2], U_lambda^[2], ...) -- a single
@@ -51,7 +50,6 @@ __all__ = [
     "TrotterHamiltonian",
     "simulate_trotter_double_factorized_LTS",
     "simulate_trotter_double_factorized_PS",
-    "simulate_trotter_double_factorized_PS_RANDOM",
     "simulate_trotter_double_factorized_U_lambda",
     "simulate_trotter_double_factorized_OG",
 ]
@@ -233,65 +231,6 @@ def simulate_trotter_double_factorized_PS(
                 )
             else:
                 gamma = term_index - 1
-                vec, current_basis = _apply_two_body_term(
-                    vec, current_basis,
-                    hamiltonian.diag_coulomb_mats[gamma], hamiltonian.orbital_rotations[gamma],
-                    term_time, norb, nelec,
-                )
-        return vec, current_basis
-
-    return _run_steps(vec, hamiltonian, time, norb, nelec, n_steps, copy, save_intermediate_states, step_fn)
-
-
-# ---------------------------------------------------------------------------
-# PS_RANDOM -- Partial-Strang Random
-# ---------------------------------------------------------------------------
-
-def simulate_trotter_double_factorized_PS_RANDOM(
-    vec: np.ndarray,
-    hamiltonian: TrotterHamiltonian,
-    time: float,
-    norb: int,
-    nelec: tuple[int, int],
-    n_steps: int = 1,
-    order: int = 0,
-    copy: bool = True,
-    save_intermediate_states: bool = False,
-    random_seed: Optional[int] = None,
-) -> Union[np.ndarray, list]:
-    """Partial-Strang Random (PS_RANDOM): like PS, but the sandwiching term
-    is a randomly chosen two-body term H1^gamma instead of H0.
-
-    Seed: H_rand, H0, [H1^gamma for gamma != rand] (symmetrized for order>0).
-    The random term is chosen once (seeded by ``random_seed``) and reused for
-    every step.
-    """
-    n_df_terms = len(hamiltonian.diag_coulomb_mats)
-    if n_df_terms == 0:
-        raise ValueError("No two-body terms available for random selection.")
-
-    rng = np.random.default_rng(random_seed)
-    random_idx = int(rng.integers(n_df_terms))
-    remaining_indices = [i for i in range(n_df_terms) if i != random_idx]
-    H_random_mat = hamiltonian.diag_coulomb_mats[random_idx]
-    H_random_rotation = hamiltonian.orbital_rotations[random_idx]
-    n_terms = 2 + len(remaining_indices)
-
-    def step_fn(vec, current_basis, step_time):
-        for term_index, term_time in simulate_trotter_step_iterator(n_terms, step_time, order):
-            if term_index == 0:
-                vec, current_basis = _apply_two_body_term(
-                    vec, current_basis, H_random_mat, H_random_rotation,
-                    term_time, norb, nelec,
-                )
-            elif term_index == 1:
-                vec, current_basis = _apply_one_body_term(
-                    vec, current_basis,
-                    hamiltonian.one_body_energies, hamiltonian.one_body_basis_change,
-                    term_time, norb, nelec,
-                )
-            else:
-                gamma = remaining_indices[term_index - 2]
                 vec, current_basis = _apply_two_body_term(
                     vec, current_basis,
                     hamiltonian.diag_coulomb_mats[gamma], hamiltonian.orbital_rotations[gamma],

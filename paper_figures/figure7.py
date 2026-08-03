@@ -26,8 +26,13 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-from common import (LABELS, METHODS, STYLES, Stepper, method_kw, spin_model,
-                    square, use_pra_style, FIG_W_2COL)
+import sys
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), os.pardir))
+
+from norm_aware.constants import METHODS
+from norm_aware.pauli import Stepper, spin_model, square
+from norm_aware.style import (FIG_W_2COL, LABELS, STYLES, method_kw,
+                              use_pra_style)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(HERE, "data", "figure7_local_errors.json")

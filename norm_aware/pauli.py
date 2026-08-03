@@ -21,15 +21,12 @@ from __future__ import annotations
 import numpy as np
 from scipy.linalg import expm
 
+from .constants import LAMBDA_TILDE
+
 __all__ = [
     "PauliString", "chain", "square", "all_to_all", "bond_terms",
-    "spin_model", "random_klocal_model", "hubbard_model",
-    "Stepper", "METHODS", "LAMBDA_TILDE", "use_pra_style", "FIG_W_2COL",
+    "spin_model", "random_klocal_model", "hubbard_model", "Stepper",
 ]
-
-# Optimal lambda: the root of gamma_2 that is stable under the alpha^2
-# correction (Appendix A).
-LAMBDA_TILDE = 0.5 - np.sqrt(3) / 6          # 0.2113248654...
 
 _P = {"X": np.array([[0, 1], [1, 0]], complex),
       "Y": np.array([[0, -1j], [1j, 0]], complex),
@@ -179,40 +176,6 @@ def hubbard_model(norb=5, nelec=(2, 2)):
     return h0, [h1]
 
 
-# --------------------------------------------------------------------------
-# the nine product formulas
-# --------------------------------------------------------------------------
-METHODS = ["lts", "ps", "thrift", "u_lambda",
-           "lts2", "ps2", "thrift2", "u_lambda2", "og"]
-
-LABELS = {
-    "lts":       r"$U^{[1]}_{\mathrm{LTS}}$",
-    "ps":        r"$U^{[1]}_{\mathrm{PS}}$",
-    "thrift":    r"$U^{[1]}_{\mathrm{THRIFT}}$",
-    "u_lambda":  r"$U^{[1]}_{\tilde\lambda}$",
-    "lts2":      r"$U^{[2]}_{\mathrm{LTS}}$",
-    "ps2":       r"$U^{[2]}_{\mathrm{PS}}$",
-    "thrift2":   r"$U^{[2]}_{\mathrm{THRIFT}}$",
-    "u_lambda2": r"$U^{[2]}_{\tilde\lambda}$",
-    "og":        r"$U^{[2]}_{\mathrm{OG}}$",
-}
-
-# colour / marker per method, identical across every figure of the paper
-_C = {"LTS": "black", "PS": "#d62728", "THRIFT": "#1f77b4",
-      "ULAM": "#009e73", "OG": "#b8860b"}
-STYLES = {
-    "lts":       dict(color=_C["LTS"],    marker="o", ls="-",  filled=True),
-    "ps":        dict(color=_C["PS"],     marker="s", ls="-",  filled=True),
-    "thrift":    dict(color=_C["THRIFT"], marker="^", ls="-",  filled=False),
-    "u_lambda":  dict(color=_C["ULAM"],   marker="D", ls="-",  filled=True),
-    "lts2":      dict(color=_C["LTS"],    marker="o", ls="--", filled=True),
-    "ps2":       dict(color=_C["PS"],     marker="s", ls="--", filled=False),
-    "thrift2":   dict(color=_C["THRIFT"], marker="^", ls="--", filled=True),
-    "u_lambda2": dict(color=_C["ULAM"],   marker="D", ls="--", filled=False),
-    "og":        dict(color=_C["OG"],     marker="v", ls="--", filled=False),
-}
-
-
 class Stepper:
     """One application of a product formula for ``H = H_0 + alpha * sum_k H_k``.
 
@@ -335,39 +298,3 @@ class Stepper:
         """``|| exp(-i H t) - U_step(t) ||_F`` for one application."""
         return float(np.linalg.norm(self.exact(alpha, t) -
                                     self.step(method, alpha, t, lam), "fro"))
-
-
-# --------------------------------------------------------------------------
-# plotting style (PRA two-column)
-# --------------------------------------------------------------------------
-FIG_W_1COL, FIG_W_2COL = 3.4, 7.0
-
-
-def use_pra_style():
-    import matplotlib.pyplot as plt
-    plt.rcParams.update({
-        "font.size": 9, "axes.labelsize": 9, "legend.fontsize": 7,
-        "xtick.labelsize": 8, "ytick.labelsize": 8,
-        "font.family": "serif", "mathtext.fontset": "cm",
-        "axes.linewidth": 0.6,
-        "xtick.direction": "in", "ytick.direction": "in",
-        "xtick.top": True, "ytick.right": True,
-        "xtick.minor.visible": True, "ytick.minor.visible": True,
-        "xtick.major.size": 3.0, "ytick.major.size": 3.0,
-        "xtick.minor.size": 1.6, "ytick.minor.size": 1.6,
-        "xtick.major.width": 0.6, "ytick.major.width": 0.6,
-        "xtick.minor.width": 0.45, "ytick.minor.width": 0.45,
-        "legend.framealpha": 0.9, "legend.edgecolor": "0.6",
-        "lines.linewidth": 1.1, "lines.markersize": 3.4,
-        "figure.constrained_layout.use": False,
-    })
-
-
-def method_kw(method, **extra):
-    st = STYLES[method]
-    kw = dict(color=st["color"], marker=st["marker"], ls=st["ls"],
-              lw=1.1, ms=3.5, markeredgewidth=0.9,
-              markerfacecolor=st["color"] if st["filled"] else "none",
-              markeredgecolor=st["color"])
-    kw.update(extra)
-    return kw
