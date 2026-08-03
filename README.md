@@ -48,6 +48,20 @@ spin model and on molecular electronic-structure Hamiltonians.
 
   Raw per-sample errors are cached in `simulation_results_multi.npz`.
 
+- **`paper_figures/`** -- self-contained code for the two appendix figures,
+  independent of the notebooks and of `trotter_methods.py`:
+  - `figure6.py` -- universality of the optimal $\tilde\lambda$, obtained from
+    Eq. (27); produces `figures/og_universality_a.pdf` and `_b.pdf`
+  - `figure7.py` -- effective exponent of the **local** error in $\alpha$;
+    produces `figures/alpha_exponent_summary_L3_t1.0.pdf`
+  - `common.py` -- benchmark Hamiltonians, the nine product formulas, and the
+    shared plotting style
+
+  Both scripts replot from `paper_figures/data/` in seconds; pass `--compute`
+  to regenerate the data from scratch. See `paper_figures/README.md` for the
+  numerical limits that fix the smallest usable time step and the floor of
+  Figure 6.
+
 ## Installation
 
 ```bash
