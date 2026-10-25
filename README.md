@@ -134,10 +134,11 @@ slightly differently.
 ## Citation
 
 ```bibtex
-@article{pineiromoreno2025normaware,
+@article{,
   title   = {Norm-Aware Product Formulas for Hamiltonian Simulations},
   author  = {Pi{\~n}eiro Moreno, Carlos A. and Krause, Pascal and Bande, Annika},
-  journal = {in preparation},
-  year    = {2026}
+  journal = {arXiv:2610.31070},
+  year    = {2026},
+  url     = {http://arxiv.org/abs/2610.31070}
 }
 ```
